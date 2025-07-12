@@ -1,0 +1,43 @@
+[
+    {
+        "name": "Documents",
+        "type": "folder",
+        "path": "/Documents",
+        "children": [
+            {
+                "name": "file1.txt",
+                "type": "file",
+                "path": "/Documents/file1.txt"
+            }
+        ]
+    },
+    {
+        "name": "Pictures",
+        "type": "folder",
+        "path": "/Pictures",
+        "children": [
+            {
+                "name": "family_photo.png",
+                "type": "file",
+                "path": "/Documents/family_photo.png"
+            },
+            {
+                "name": "friends_photo.png",
+                "type": "file",
+                "path": "/Documents/friends_photo.png"
+            },
+            {
+                "name": "Private",
+                "type": "folder",
+                "path": "/Pictures/Private",
+                "children": [
+                    {
+                        "name": "school_photo.jpeg",
+                        "type": "file",
+                        "path": "/Pictures/Private/school_photo.jpeg"
+                    }
+                ]
+            }
+        ]
+    }
+]
