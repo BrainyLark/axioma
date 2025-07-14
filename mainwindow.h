@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QThread>
 #include <QJsonArray>
+#include <QVBoxLayout>
 
 #include "DocumentReader.h"
 #include "documentwidget.h"
@@ -23,12 +24,16 @@ public:
     ~MainWindow();
 
 private:
+
+    // Initial setup methods
     void initialSetup();
     void documentSetup();
+    void commandSetup();
 
     // visible elements
     Ui::MainWindow *ui;
     DocumentWidget* documentWidget;
+    QVBoxLayout* userCmdBox;
 
     // background elements
     QThread* workerThread;

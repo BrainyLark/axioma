@@ -26,6 +26,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         include/DocumentReader.h
         src/DocumentReader.cpp
         widgets/documentwidget.h widgets/documentwidget.cpp
+        include/CmdExecution.h src/CmdExecution.cpp
     )
 
 # Define target properties for Android with Qt 6 as:

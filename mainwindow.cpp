@@ -1,7 +1,10 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 
+#include <QFont>
+#include <QLabel>
 #include <QMessageBox>
+#include <QPlainTextEdit>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -14,9 +17,6 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
-
-    delete documentReader;
-    delete documentWidget;
 }
 
 void MainWindow::initialSetup()
@@ -25,6 +25,7 @@ void MainWindow::initialSetup()
     qInfo() << "I am starting document setup";
 
     documentSetup();
+    commandSetup();
 }
 
 void MainWindow::documentSetup()
@@ -32,7 +33,11 @@ void MainWindow::documentSetup()
     // Create necessary objects and threads
 
     documentWidget = new DocumentWidget();
-    setCentralWidget(documentWidget);
+
+    documentWidget->setColumnCount(3);
+    documentWidget->setHeaderLabels(QList<QString>{"Structure", "Path", "Type"});
+
+    ui->hbox->addWidget(documentWidget, 1);
 
     QString documentFilePath = "C:\\Users\\erden\\QtProjects\\Axioma\\data\\tree.json";
     documentReader = new DocumentReader(documentFilePath);
@@ -53,15 +58,52 @@ void MainWindow::documentSetup()
     QObject::connect(documentReader, &DocumentReader::fetchError,
                      this, &MainWindow::onFetchError);
 
+    // Delete the objects conveniently
+    QObject::connect(workerThread,
+                     &QThread::finished, documentReader,
+                     &QObject::deleteLater);
+
+    QObject::connect(workerThread,
+                     &QThread::finished, workerThread,
+                     &QObject::deleteLater);
+
     workerThread->start();
+}
+
+void MainWindow::commandSetup()
+{
+    userCmdBox = new QVBoxLayout();
+
+    QPlainTextEdit* responseArea = new QPlainTextEdit();
+    QPlainTextEdit* messageArea = new QPlainTextEdit();
+
+    responseArea->setPlaceholderText("Submit a request and you will receive your response here...");
+    responseArea->setReadOnly(true);
+
+    messageArea->setPlaceholderText("Ask your questions here...");
+
+    QLabel* lblResponse{new QLabel()};
+    QLabel* lblSubmit{new QLabel()};
+
+    lblResponse->setText("Language model Response:");
+    lblSubmit->setText("Your query:");
+
+    userCmdBox->addWidget(lblResponse);
+    userCmdBox->addWidget(responseArea, 4);
+
+    userCmdBox->addWidget(lblSubmit);
+    userCmdBox->addWidget(messageArea, 1);
+
+    userCmdBox->setSpacing(7);
+
+    ui->hbox->addLayout(userCmdBox, 1);
 }
 
 void MainWindow::onDataFetched(const QJsonArray &results)
 {
-    qInfo() << "onDataFetched is called";
-    qInfo() << results;
 
     documentWidget->recursiveBuild(nullptr, results);
+    documentWidget->expandAll();
 }
 
 void MainWindow::onFetchError(const QString &error)

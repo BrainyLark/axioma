@@ -10,11 +10,6 @@ DocumentReader::DocumentReader(const QString& filepath)
     this->filepath = filepath;
 }
 
-const QJsonArray &DocumentReader::data()
-{
-    return items;
-}
-
 
 void DocumentReader::fetchFile()
 {
@@ -28,8 +23,6 @@ void DocumentReader::fetchFile()
     QByteArray bytes = file.readAll();
     QJsonDocument document = QJsonDocument::fromJson(bytes);
 
-    items = document.array();
-
-    emit dataFetched(items);
+    emit dataFetched(document.array());
 }
 

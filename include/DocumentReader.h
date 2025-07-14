@@ -11,14 +11,12 @@ class DocumentReader : public QObject {
 
 public:
     DocumentReader(const QString& filepath);
-    const QJsonArray& data();
 
 signals:
     void dataFetched(const QJsonArray& result);
     void fetchError(const QString& error);
 
 private:
-    QJsonArray items;
     QString filepath;
 
 public slots:
